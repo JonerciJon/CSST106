@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JonerciJon // CSST106 Computer Vision Lab Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0b0f17;
+      color: #e6edf3;
+    }
+    code, pre, .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0b0f17; }
+    ::-webkit-scrollbar-thumb { background: #21262d; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #30363d; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- TOP BAR -->
+  <header class="border-b border-[#21262d] bg-[#0d1117]/95 backdrop-blur sticky top-0 z-20">
+    <div class="max-w-7xl mx-auto px-4 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-md bg-[#161b22] border border-[#30363d] flex items-center justify-center text-[#58a6ff] font-semibold mono text-sm">
+          JJ
+        </div>
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h1 class="text-sm sm:text-base font-semibold text-white">JonerciJon / CSST106 Computer Vision Labs</h1>
+            <span class="text-[11px] mono px-2 py-0.5 rounded-full bg-[#161b22] text-[#8b949e] border border-[#30363d]">main • 12 commits</span>
+          </div>
+          <p class="text-xs text-[#8b949e]">Perception &amp; Computer Vision Jupyter Notebook Showcase</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <div class="flex items-center bg-[#161b22] border border-[#30363d] rounded-md px-2.5 py-1.5 text-xs">
+          <span class="text-[#8b949e] mono mr-1.5">repo:</span>
+          <input id="ownerInput" type="text" value="JonerciJon" aria-label="GitHub Username"
+                 class="bg-transparent text-white mono w-24 focus:outline-none" />
+          <span class="text-[#8b949e] mono mx-1">/</span>
+          <input id="repoNameInput" type="text" placeholder="repo-name" aria-label="Repository Name"
+                 class="bg-transparent text-white mono w-32 focus:outline-none" />
+        </div>
+        <button id="connectRepoBtn"
+                class="px-3 py-1.5 rounded-md bg-[#238636] hover:bg-[#2ea043] text-white text-xs font-medium transition cursor-pointer">
+          Link Repo
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- LEFT: NOTEBOOK DIRECTORY MATCHING REPOSITORY FILES -->
+    <section class="lg:col-span-5 flex flex-col gap-3">
+      <div class="flex items-center justify-between">
+        <h2 class="text-xs font-semibold uppercase tracking-wider text-[#8b949e]">Repository Notebooks &amp; Docs</h2>
+        <span class="text-xs mono text-[#8b949e]">7 items</span>
+      </div>
+
+      <input id="filterInput" type="text" placeholder="Search filenames or commit notes..."
+             class="w-full bg-[#161b22] border border-[#30363d] rounded-md px-3 py-2 text-xs text-white placeholder-[#6e7681] focus:outline-none focus:border-[#58a6ff]" />
+
+      <div id="notebookList" class="border border-[#30363d] rounded-md bg-[#0d1117] divide-y divide-[#21262d] overflow-hidden">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- RIGHT: NOTEBOOK INSPECTOR & COLAB LAUNCH -->
+    <section class="lg:col-span-7 flex flex-col gap-4">
+      <div class="border border-[#30363d] rounded-md bg-[#0d1117] overflow-hidden flex flex-col flex-1">
+        <!-- INSPECTOR HEADER -->
+        <div class="px-4 py-3 bg-[#161b22] border-b border-[#30363d] flex flex-wrap items-center justify-between gap-2">
+          <div class="min-w-0">
+            <div id="selectedFileName" class="mono text-xs sm:text-sm font-semibold text-[#58a6ff] truncate">
+              Lab 5 Experiment_PCA_in_CV.ipynb
+            </div>
+            <div id="selectedCommitMsg" class="text-xs text-[#8b949e] truncate">
+              Rename PCA_in_CV.ipynb to Lab 5 Experiment_PCA_in_CV.ipynb • 14 minutes ago
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <a id="colabBtn" href="https://colab.research.google.com/" target="_blank" rel="noopener noreferrer"
+               class="px-3 py-1.5 rounded-md bg-[#1f6feb]/20 hover:bg-[#1f6feb]/30 border border-[#58a6ff]/40 text-[#58a6ff] text-xs font-medium transition">
+              Open in Colab ↗
+            </a>
+            <a id="ghFileBtn" href="https://github.com/JonerciJon" target="_blank" rel="noopener noreferrer"
+               class="px-3 py-1.5 rounded-md bg-[#21262d] hover:bg-[#30363d] text-[#e6edf3] text-xs font-medium transition">
+              GitHub ↗
+            </a>
+          </div>
+        </div>
+
+        <!-- SUMMARY & KEY STEPS -->
+        <div class="p-4 space-y-4 border-b border-[#21262d]">
+          <div>
+            <h3 class="text-xs font-semibold uppercase tracking-wider text-[#8b949e] mb-1">Experiment Overview</h3>
+            <p id="selectedSummary" class="text-xs sm:text-sm text-[#c9d1d9] leading-relaxed"></p>
+          </div>
+          <div>
+            <h3 class="text-xs font-semibold uppercase tracking-wider text-[#8b949e] mb-1.5">Notebook Workflow</h3>
+            <ul id="selectedSteps" class="space-y-1 text-xs text-[#8b949e] list-disc list-inside"></ul>
+          </div>
+        </div>
+
+        <!-- CODE CELL PREVIEW -->
+        <div class="p-4 flex-1 bg-[#0b0f17]">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[11px] mono text-[#8b949e]">Key Code Cell Preview</span>
+            <button id="copySnippetBtn" class="text-[11px] mono text-[#58a6ff] hover:underline cursor-pointer">
+              Copy code
+            </button>
+          </div>
+          <pre id="snippetPre" class="mono text-xs text-[#e6edf3] bg-[#161b22] border border-[#30363d] rounded-md p-3.5 overflow-x-auto leading-relaxed"></pre>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    const REPO_FILES = [
+      {
+        name: "Lab 5 Experiment_PCA_in_CV.ipynb",
+        commit: "Rename PCA_in_CV.ipynb to Lab 5 Experiment_PCA_in_CV.ipynb",
+        time: "14 minutes ago",
+        summary: "Applies Principal Component Analysis (Eigenfaces) to reduce facial image dimensions and classifies subjects using a Support Vector Machine (SVM).",
+        steps: [
+          "Load and flatten face image dataset and split into train/test sets",
+          "Fit PCA with whitening to extract top principal components (Eigenfaces)",
+          "Plot cumulative explained variance and train an SVM classifier on PCA features"
+        ],
+        code: `from sklearn.decomposition import PCA
+from sklearn.svm import SVC
+
+pca = PCA(n_components=150, svd_solver="randomized", whiten=True, random_state=42)
+X_train_pca = pca.fit_transform(X_train)
+X_test_pca = pca.transform(X_test)
+
+clf = SVC(kernel="rbf", class_weight="balanced", random_state=42)
+clf.fit(X_train_pca, y_train)`
+      },
+      {
+        name: "Lab_1_Experiment_Images.ipynb",
+        commit: "Lab 1 Activity",
+        time: "43 minutes ago",
+        summary: "Introduces digital image representation as pixel arrays, BGR vs. RGB channels, grayscale conversion, pixel inspection/editing, cropping, resizing, and rotation.",
+        steps: [
+          "Load image using OpenCV and inspect shape (height, width, channels)",
+          "Convert color image to grayscale and inspect/modify pixel values",
+          "Crop a region of interest (ROI), resize dimensions, and rotate by 90 degrees"
+        ],
+        code: `import cv2
+
+img = cv2.imread("sample.jpg")
+gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+cropped = img[80:320, 120:480]
+resized = cv2.resize(img, (300, 200))
+rotated = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)`
+      },
+      {
+        name: "Lab_7 Experiment_Segmentation.ipynb",
+        commit: "Segmentation",
+        time: "15 minutes ago",
+        summary: "Compares thresholding (Otsu and adaptive), region-based methods (region growing and watershed), edge/contour boundaries, and semantic segmentation.",
+        steps: [
+          "Apply global Otsu and adaptive thresholding on preprocessed grayscale images",
+          "Run region growing and marker-based watershed to separate regions",
+          "Extract Canny edges/contours and compare against semantic segmentation masks"
+        ],
+        code: `_, otsu_mask = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+adaptive_mask = cv2.adaptiveThreshold(blur, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                                      cv2.THRESH_BINARY_INV, 25, 7)
+edges = cv2.Canny(blur, 50, 150)`
+      },
+      {
+        name: "Lab_Experiment_2_Edge_Detection.ipynb",
+        commit: "Edge Detection",
+        time: "38 minutes ago",
+        summary: "Smooths grayscale images with Gaussian blur and compares directional Sobel gradients against multi-stage Canny edge detection.",
+        steps: [
+          "Load grayscale input image and apply Gaussian smoothing",
+          "Compute Sobel X and Sobel Y gradients and combine gradient magnitude",
+          "Run Canny edge detection and display original, Sobel, and Canny side by side"
+        ],
+        code: `img_blur = cv2.GaussianBlur(gray, (3, 3), 0)
+sobelx = cv2.Sobel(img_blur, cv2.CV_64F, 1, 0, ksize=3)
+sobely = cv2.Sobel(img_blur, cv2.CV_64F, 0, 1, ksize=3)
+sobel_mag = cv2.magnitude(sobelx, sobely)
+canny_edges = cv2.Canny(img_blur, 100, 200)`
+      },
+      {
+        name: "Lab_Experiment_3_Histogram.ipynb",
+        commit: "Histogram",
+        time: "35 minutes ago",
+        summary: "Analyzes intensity histograms and enhances image contrast using global histogram equalization, contrast stretching, and CLAHE.",
+        steps: [
+          "Compute intensity histograms before and after histogram equalization",
+          "Apply global equalization (and luminance channel equalization for color)",
+          "Compare linear contrast stretching and CLAHE against global equalization"
+        ],
+        code: `global_eq = cv2.equalizeHist(gray)
+clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+clahe_eq = clahe.apply(gray)`
+      },
+      {
+        name: "Lab_Experiment_4_Surf_Feature_Detection.ipynb",
+        commit: "Surf Feature Detection",
+        time: "32 minutes ago",
+        summary: "Extracts local keypoints and descriptors, tests threshold sensitivity, matches features between two views, and compares SURF/SIFT against ORB.",
+        steps: [
+          "Detect keypoints and descriptors and visualize scale/orientation markers",
+          "Match descriptors across two images and filter with Lowe's ratio test",
+          "Compare keypoint counts, runtime, and upright mode across feature detectors"
+        ],
+        code: `kp1, des1 = detector.detectAndCompute(img1, None)
+kp2, des2 = detector.detectAndCompute(img2, None)
+bf = cv2.BFMatcher(cv2.NORM_L2)
+matches = bf.knnMatch(des1, des2, k=2)
+good = [m for m, n in matches if m.distance < 0.75 * n.distance]`
+      },
+      {
+        name: "README.md",
+        commit: "Initial commit",
+        time: "46 minutes ago",
+        summary: "Repository documentation outlining the CSST106 Perception and Computer Vision laboratory notebooks, setup steps, and course overview.",
+        steps: [
+          "Document course title (CSST106: Perception and Computer Vision)",
+          "List laboratory notebooks and Google Colab execution instructions",
+          "Provide navigation links for each weekly experiment"
+        ],
+        code: `# CSST106 — Perception and Computer Vision
+Laboratory notebooks for image manipulation, edge detection, histogram enhancement,
+feature detection, PCA eigenfaces, and segmentation.`
+      }
+    ];
+
+    let activeIdx = 0;
+    const listEl = document.getElementById("notebookList");
+
+    function getRepoUrl() {
+      const owner = document.getElementById("ownerInput").value.trim() || "JonerciJon";
+      const repo = document.getElementById("repoNameInput").value.trim();
+      return repo ? `https://github.com/${owner}/${repo}` : `https://github.com/${owner}`;
+    }
+
+    function getColabUrl(filename) {
+      const owner = document.getElementById("ownerInput").value.trim() || "JonerciJon";
+      const repo = document.getElementById("repoNameInput").value.trim();
+      if (!repo) return "https://colab.research.google.com/";
+      const encodedPath = filename.split("/").map(encodeURIComponent).join("/");
+      return `https://colab.research.google.com/github/${owner}/${repo}/blob/main/${encodedPath}`;
+    }
+
+    function renderList(query = "") {
+      const q = query.toLowerCase().trim();
+      listEl.innerHTML = "";
+      REPO_FILES.forEach((file, idx) => {
+        if (q && !file.name.toLowerCase().includes(q) && !file.commit.toLowerCase().includes(q)) return;
+        const isActive = idx === activeIdx;
+        const row = document.createElement("button");
+        row.type = "button";
+        row.className = `w-full text-left px-3.5 py-3 flex items-center justify-between gap-3 transition cursor-pointer ${
+          isActive ? "bg-[#161b22] border-l-2 border-l-[#58a6ff]" : "hover:bg-[#161b22]/50"
+        }`;
+        row.innerHTML = `
+          <div class="min-w-0">
+            <div class="mono text-xs font-medium truncate ${isActive ? "text-[#58a6ff]" : "text-[#e6edf3]"}">${file.name}</div>
+            <div class="text-[11px] text-[#8b949e] truncate mt-0.5">${file.commit}</div>
+          </div>
+          <span class="text-[11px] text-[#6e7681] shrink-0">${file.time}</span>
+        `;
+        row.onclick = () => selectFile(idx);
+        listEl.appendChild(row);
+      });
+    }
+
+    function selectFile(idx) {
+      activeIdx = idx;
+      const file = REPO_FILES[idx];
+      document.getElementById("selectedFileName").textContent = file.name;
+      document.getElementById("selectedCommitMsg").textContent = `${file.commit} • ${file.time}`;
+      document.getElementById("selectedSummary").textContent = file.summary;
+      document.getElementById("snippetPre").textContent = file.code;
+
+      const stepsEl = document.getElementById("selectedSteps");
+      stepsEl.innerHTML = "";
+      file.steps.forEach(step => {
+        const li = document.createElement("li");
+        li.textContent = step;
+        stepsEl.appendChild(li);
+      });
+
+      updateLinks();
+      renderList(document.getElementById("filterInput").value);
+    }
+
+    function updateLinks() {
+      const file = REPO_FILES[activeIdx];
+      const baseRepo = getRepoUrl();
+      const repo = document.getElementById("repoNameInput").value.trim();
+      const owner = document.getElementById("ownerInput").value.trim() || "JonerciJon";
+      const encoded = encodeURIComponent(file.name);
+
+      document.getElementById("ghFileBtn").href = repo
+        ? `${baseRepo}/blob/main/${encoded}`
+        : baseRepo;
+      document.getElementById("colabBtn").href = repo
+        ? `https://colab.research.google.com/github/${owner}/${repo}/blob/main/${encoded}`
+        : "https://colab.research.google.com/";
+    }
+
+    document.getElementById("filterInput").addEventListener("input", (e) => renderList(e.target.value));
+    document.getElementById("connectRepoBtn").addEventListener("click", updateLinks);
+    document.getElementById("repoNameInput").addEventListener("input", updateLinks);
+
+    document.getElementById("copySnippetBtn").addEventListener("click", async () => {
+      await navigator.clipboard.writeText(REPO_FILES[activeIdx].code);
+      const btn = document.getElementById("copySnippetBtn");
+      btn.textContent = "Copied!";
+      setTimeout(() => (btn.textContent = "Copy code"), 1200);
+    });
+
+    selectFile(0);
+  </script>
+</body>
+</html>
