@@ -1,4 +1,3 @@
-# CSST106
 # CSST106 – Computer Vision Activities
 
 ## Description
